@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include <SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 
 void screen_init(void);
@@ -13,12 +13,13 @@ void textField(void);
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
+SDL_Renderer* fontrenderer = NULL;
 SDL_Rect r;
 
 void main (void)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
-	//TTF_Init();
+	TTF_Init();
 	
 	screen_init();
 	matrix();
@@ -26,27 +27,36 @@ void main (void)
 	instructions();
 	textField();
 	
-	/*TTF_Font *font = TTF_OpenFont("arial.ttf",25);
+	TTF_Font *font = TTF_OpenFont("arial.ttf",25);
 	
 	SDL_Color color = {0,0,0};
 	SDL_Surface *surface = TTF_RenderText_Solid(font,"COMMUNICATION AID USING ELECTROOCULOGRAPHY WITH TEXT-TO-SPEECH", color); 
-	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer,surface);
-	SDL_QueryTexture(texture,NULL,NULL,0,0);
-	SDL_Rect t = {50,50,0,0};
-	SDL_RenderCopy(renderer,texture,NULL,&t);*/
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(fontrenderer,surface);
+	//SDL_QueryTexture(texture,NULL,NULL,0,0);
+	//SDL_Rect t = {90, 80, 1300, 40};
+	
+	int texW = 0;
+	int texH = 0;
+	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+	SDL_Rect t = { 0, 0, texW, texH };
+	SDL_RenderCopy(fontrenderer,texture,NULL,&t);
+	//SDL_BlitSurface(surface,NULL,surface,&t);
 	
 	// Render the UI to the screen
     SDL_RenderPresent(renderer);
+    SDL_RenderPresent(fontrenderer);
+	//SDL_Flip(surface);
 	
 	SDL_Delay(5000);	
 	
 	SDL_DestroyWindow(window);
-	//SDL_DestroyTexture(texture);
-	//SDL_FreeSurface(surface);
+	SDL_DestroyTexture(texture);
+	SDL_FreeSurface(surface);
 	SDL_DestroyRenderer(renderer);
+	SDL_DestroyRenderer(fontrenderer);
     SDL_Quit();
-    //TTF_Quit();
-    //TTF_CloseFont(font);
+    TTF_Quit();
+    TTF_CloseFont(font);
 }
 
 void screen_init(void)
@@ -63,6 +73,7 @@ void screen_init(void)
 	// Setup renderer
 	
 	renderer =  SDL_CreateRenderer( window, 0, SDL_RENDERER_ACCELERATED);
+	fontrenderer =  SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED);
 
 	// Set render color to gray ( background will be rendered in this color )
 	SDL_SetRenderDrawColor( renderer, 211, 211, 211, 1 );
@@ -129,11 +140,11 @@ void viewpoints(void)
 	SDL_RenderFillRect( renderer, &r );
 	createRect(1320,0,40,40);							//5
 	SDL_RenderFillRect( renderer, &r );
-	createRect(0,360,40,40);							//4
+	createRect(0,380,40,40);							//4
 	SDL_RenderFillRect( renderer, &r );
-	createRect(670,360,40,40);							//C
+	createRect(670,380,40,40);							//C
 	SDL_RenderFillRect( renderer, &r );
-	createRect(1320,360,40,40);							//2
+	createRect(1320,380,40,40);							//2
 	SDL_RenderFillRect( renderer, &r );
 	createRect(0,730,40,40);							//7
 	SDL_RenderFillRect( renderer, &r );
