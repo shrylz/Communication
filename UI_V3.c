@@ -6,14 +6,25 @@ void screen_init();
 void ttf_init();
 void drawLine(int x, int y, int w, int h);
 void drawRectGreen(int x, int y, int w, int h);
+void drawRectRed(int x, int y, int w, int h);
 void drawRectLightGray(int x, int y, int w, int h);
+void drawRectYellow(int x, int y, int w, int h);
 void text(int x, int y, int w, int h, char *txt,TTF_Font *font);
 void matrix();
+void matrixText();
 void rowLines();
 void colLines();
 void viewpoints();
 void instructions();
 void textField();
+void centerRed();
+void centerGreen();
+void highlightRow1();
+void highlightRow2();
+void highlightRow3();
+void highlightRow4();
+void highlightRow5();
+void highlightRow6();
 
 SDL_Surface* screen;
 TTF_Font *font25, *font30;
@@ -25,6 +36,8 @@ char matrixLetters[6][100] = {{"E      A      R       I        .       ?    SPC 
 							  {"P      M     H      G      J      Q       1       2"}, 
 							  {"3       4       5       6       7       8       9      0"},
 							  {"+       -       =      &       /        '       !     TTS"}};
+							  
+int mode=0, flag_row, row, col, wsflag;
 
 int main(int argc, char *argv[])
 {
@@ -44,6 +57,8 @@ int main(int argc, char *argv[])
 	textField();
 		
 	SDL_Flip(screen);
+	
+	//SDL_Flip(screen);
 	while (!done)
 	{
 	/* Check for events */
@@ -56,6 +71,70 @@ int main(int argc, char *argv[])
 			}
 			if(event.type == SDL_KEYDOWN)
 			{
+				switch(mode)
+				{
+					case 0: //center
+						if(event.key.keysym.sym == SDLK_c)
+						{
+							mode = 1;
+							/*if(!flag_row)
+							{
+								mode = 1;
+								matrix();
+							}
+							else
+							{
+								mode = 2;
+								flag_row = 0;
+							}*/
+							centerRed();
+							SDL_Flip(screen);
+						}
+						break;
+					case 1: //row
+						switch(event.key.keysym.sym) 
+						{
+							case SDLK_1:
+								highlightRow1();
+								centerGreen();
+								mode = 0;
+								SDL_Flip(screen);
+								break;
+							case SDLK_2:
+								highlightRow2();
+								centerGreen();
+								mode = 0;
+								SDL_Flip(screen);
+								break;
+							case SDLK_3:
+								highlightRow3();
+								centerGreen();
+								mode = 0;
+								SDL_Flip(screen);
+								break;
+							case SDLK_4:
+								highlightRow4();
+								centerGreen();
+								mode = 0;
+								SDL_Flip(screen);
+								break;
+							case SDLK_5:
+								highlightRow5();
+								centerGreen();
+								mode = 0;
+								SDL_Flip(screen);
+								break;
+							case SDLK_6:
+								highlightRow6();
+								centerGreen();
+								mode = 0;
+								SDL_Flip(screen);
+								break;
+							default:
+								mode = 1;
+								break;
+						}
+				}
 				if(event.key.keysym.sym == SDLK_ESCAPE)
 				{
 					 done = 1;
@@ -99,10 +178,22 @@ void drawRectGreen(int x, int y, int w, int h)
 	SDL_FillRect(screen, &greenBox, SDL_MapRGB(screen->format, 50, 205, 50));	
 }
 
+void drawRectRed(int x, int y, int w, int h)
+{
+	SDL_Rect greenBox = {x,y,w,h};
+	SDL_FillRect(screen, &greenBox, SDL_MapRGB(screen->format, 255, 0, 0));	
+}
+
 void drawRectLightGray(int x, int y, int w, int h)
 {
 	SDL_Rect greenBox = {x,y,w,h};
 	SDL_FillRect(screen, &greenBox, SDL_MapRGB(screen->format, 245, 245, 245));	
+}
+
+void drawRectYellow(int x, int y, int w, int h)
+{
+	SDL_Rect greenBox = {x,y,w,h};
+	SDL_FillRect(screen, &greenBox, SDL_MapRGB(screen->format, 255, 250, 205));	
 }
 
 void text(int x, int y, int w, int h, char *txt, TTF_Font *f)
@@ -115,12 +206,17 @@ void text(int x, int y, int w, int h, char *txt, TTF_Font *f)
 
 void matrix()
 {
-	int i, j,line_x=108,line_y=140;
 	drawRectLightGray(80,125,560,420);
     rowLines();	
     colLines();
     
-    text(110,90,30,30,"1         2          3          4         5         6          7         8",font25);
+    matrixText();
+}
+
+void matrixText()
+{
+	int i, j,line_x=108,line_y=140;
+	text(110,90,30,30,"1         2          3          4         5         6          7         8",font25);
     text(55,145,30,30,"1",font25);
     text(55,215,30,30,"2",font25);
     text(55,285,30,30,"3",font25);
@@ -213,4 +309,58 @@ void textField()
 	drawLine(80,650,1201,2);
 	drawLine(80,600,2,50);
 	drawLine(1280,600,2,51);
+}
+
+void centerRed()
+{
+	drawRectRed(670,365,40,40);
+	text(680,365,30,30,"C",font30);
+}
+
+void centerGreen()
+{
+	drawRectGreen(670,365,40,40);
+	text(680,365,30,30,"C",font30);
+}
+
+void highlightRow1()
+{
+	drawRectYellow(82,127,556,66);
+	matrixText();
+	colLines();
+}
+
+void highlightRow2()
+{
+	drawRectYellow(82,197,556,66);
+	matrixText();
+	colLines();
+}
+	
+void highlightRow3()
+{
+	drawRectYellow(82,267,556,66);
+	matrixText();
+	colLines();
+}
+
+void highlightRow4()
+{
+	drawRectYellow(82,337,556,66);
+	matrixText();
+	colLines();
+}
+
+void highlightRow5()
+{
+	drawRectYellow(82,407,556,66);
+	matrixText();
+	colLines();
+}
+
+void highlightRow6()
+{
+	drawRectYellow(82,477,556,66);
+	matrixText();
+	colLines();
 }
