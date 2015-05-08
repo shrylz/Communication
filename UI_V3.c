@@ -20,11 +20,11 @@ TTF_Font *font25, *font30;
 SDL_Color color = {0,0,0};
 
 char matrixLetters[6][100] = {{"E      A      R       I        .       ?    SPC BCK"},
-							  {"O   T   N   S   B   F   Y   W"},
-							  {"L   C   U   D   K   V   X   Z"},
-							  {"P   M   H   G   J   Q   1   2"},
-							  {"3   4   5   6   7   8   9   0"},
-							  {"+   -   =   &   /   '   !   TTS"}};
+							  {"O     T      N       S      B      F       Y     W"},
+							  {"L      C      U      D      K      V      X      Z"},
+							  {"P      M     H      G      J      Q       1       2"}, 
+							  {"3       4       5       6       7       8       9      0"},
+							  {"+       -       =      &       /        '       !     TTS"}};
 
 int main(int argc, char *argv[])
 {
@@ -128,9 +128,10 @@ void matrix()
     text(55,425,30,30,"5",font25);
     text(55,495,30,30,"6",font25);
     
-    for(i=0;i<1;i++)
+    for(i=0;i<6;i++)
     {
 		text(line_x,line_y,30,30,matrixLetters[i],font30);
+		line_y+=70;
 	}
 }
 
