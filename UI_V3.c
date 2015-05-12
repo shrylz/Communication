@@ -9,6 +9,7 @@ void drawRectGreen(int x, int y, int w, int h);
 void drawRectRed(int x, int y, int w, int h);
 void drawRectLightGray(int x, int y, int w, int h);
 void drawRectYellow(int x, int y, int w, int h);
+void drawRectSalmon(int x, int y, int w, int h);
 void text(int x, int y, int w, int h, char *txt,TTF_Font *font);
 void matrix();
 void matrixText();
@@ -25,6 +26,7 @@ void highlightRow3();
 void highlightRow4();
 void highlightRow5();
 void highlightRow6();
+char selectCharacter(int row,int col);
 
 SDL_Surface* screen;
 TTF_Font *font25, *font30;
@@ -76,8 +78,8 @@ int main(int argc, char *argv[])
 					case 0: //center
 						if(event.key.keysym.sym == SDLK_c)
 						{
-							mode = 1;
-							/*if(!flag_row)
+							//mode = 1;
+							if(!flag_row)
 							{
 								mode = 1;
 								matrix();
@@ -86,45 +88,46 @@ int main(int argc, char *argv[])
 							{
 								mode = 2;
 								flag_row = 0;
-							}*/
+							}
 							centerRed();
 							SDL_Flip(screen);
 						}
 						break;
 					case 1: //row
-						switch(event.key.keysym.sym) 
+						row = event.key.keysym.sym-48;
+						switch(row) 
 						{
-							case SDLK_1:
+							case 1:
 								highlightRow1();
 								centerGreen();
 								mode = 0;
 								SDL_Flip(screen);
 								break;
-							case SDLK_2:
+							case 2:
 								highlightRow2();
 								centerGreen();
 								mode = 0;
 								SDL_Flip(screen);
 								break;
-							case SDLK_3:
+							case 3:
 								highlightRow3();
 								centerGreen();
 								mode = 0;
 								SDL_Flip(screen);
 								break;
-							case SDLK_4:
+							case 4:
 								highlightRow4();
 								centerGreen();
 								mode = 0;
 								SDL_Flip(screen);
 								break;
-							case SDLK_5:
+							case 5:
 								highlightRow5();
 								centerGreen();
 								mode = 0;
 								SDL_Flip(screen);
 								break;
-							case SDLK_6:
+							case 6:
 								highlightRow6();
 								centerGreen();
 								mode = 0;
@@ -134,6 +137,21 @@ int main(int argc, char *argv[])
 								mode = 1;
 								break;
 						}
+						flag_row = 1;
+						break;
+					case 2: //col
+						col = event.key.keysym.sym-48;
+						if(col>0 && col<9)
+						{
+							//wsflag=displayChar(row,col);
+							selectCharacter(row,col);
+							centerGreen();
+							mode = 0;
+							row = 0;
+							col = 0;
+							SDL_Flip(screen);
+						}
+						break;
 				}
 				if(event.key.keysym.sym == SDLK_ESCAPE)
 				{
@@ -194,6 +212,13 @@ void drawRectYellow(int x, int y, int w, int h)
 {
 	SDL_Rect greenBox = {x,y,w,h};
 	SDL_FillRect(screen, &greenBox, SDL_MapRGB(screen->format, 255, 250, 205));	
+}
+
+void drawRectSalmon(int x, int y, int w, int h)
+{
+	SDL_Rect greenBox = {x,y,w,h};
+	SDL_FillRect(screen, &greenBox, SDL_MapRGB(screen->format, 255, 160, 122));	
+	matrixText();
 }
 
 void text(int x, int y, int w, int h, char *txt, TTF_Font *f)
@@ -363,4 +388,200 @@ void highlightRow6()
 	drawRectYellow(82,477,556,66);
 	matrixText();
 	colLines();
+}
+
+char selectCharacter(int row,int col)
+{
+    switch(row)
+    {
+        case 1:
+            switch(col)
+            {
+                case 1:                                   /*E*/
+                     drawRectSalmon(82,127,68,68);
+                     return 'E';
+                case 2:                                   /*A*/
+                     drawRectSalmon(152,127,68,68);
+                     return 'A';
+                case 3:                                   /*R*/
+                     drawRectSalmon(222,127,68,68);
+                     return 'R';
+                case 4:                                   /*I*/
+                     drawRectSalmon(292,127,68,68);
+                     return 'I';
+                case 5:                                   /*.*/
+                     drawRectSalmon(362,127,68,68);
+                     return '.';
+                case 6:                                   /*?*/
+                     drawRectSalmon(432,127,68,68);
+                     return '?';
+                case 7:                                   /*SPC*/
+                     drawRectSalmon(502,127,68,68);
+                     return '_';
+                case 8:                                   /*BACK*/
+                     drawRectSalmon(572,127,68,68);
+                     return '<';
+                default:
+                  break;
+             }
+             break;
+        case 2:
+             switch(col)
+             {
+                case 1:									  /*O*/
+                     drawRectSalmon(82,197,68,68);
+                     return 'O';
+                case 2:                                   /*T*/
+                     drawRectSalmon(152,197,68,68);
+                     return 'T';
+                case 3:                                   /*N*/
+                     drawRectSalmon(222,197,68,68);
+                     return 'N';
+                case 4:                                   /*S*/
+                     drawRectSalmon(292,197,68,68);
+                     return 'S';
+                case 5:                                   /*B*/
+                     drawRectSalmon(362,197,68,68);
+                     return 'B';
+                case 6:                                   /*F*/
+                     drawRectSalmon(432,197,68,68);
+                     return 'F';
+                case 7:                                   /*Y*/
+                     drawRectSalmon(502,197,68,68);
+                     return 'Y';
+                case 8:                                   /*W*/
+                     drawRectSalmon(572,197,68,68);
+                     return 'W';
+                default:
+                 break;
+             }
+            break;
+        case 3:
+             switch(col)
+             {
+                case 1:                                   /*L*/
+                     drawRectSalmon(82,267,68,68);
+                     return 'L';
+                case 2:                                   /*C*/
+                     drawRectSalmon(152,267,68,68);
+                     return 'C';
+                case 3:                                   /*U*/
+                     drawRectSalmon(222,267,68,68);
+                     return 'U';
+                case 4:                                   /*D*/
+                     drawRectSalmon(292,267,68,68);
+                     return 'D';
+                case 5:                                   /*K*/
+                     drawRectSalmon(362,267,68,68);
+                     return 'K';
+                case 6:                                   /*V*/
+                     drawRectSalmon(432,267,68,68);
+                     return 'V';
+                case 7:                                   /*X*/
+                     drawRectSalmon(502,267,68,68);
+                     return 'X';
+                case 8:                                   /*Z*/
+                     drawRectSalmon(572,267,68,68);
+                     return 'Z';
+                default:
+                 break;
+             }
+            break;
+        case 4:
+            switch(col)
+            {
+                case 1:                                   /*P*/
+                     drawRectSalmon(82,337,68,68);
+                     return 'P';
+                case 2:                                   /*M*/
+                     drawRectSalmon(152,337,68,68);
+                     return 'M';
+                case 3:                                   /*H*/
+                     drawRectSalmon(222,337,68,68);
+                     return 'H';
+                case 4:                                   /*G*/
+                     drawRectSalmon(292,337,68,68);
+                     return 'G';
+                case 5:                                   /*J*/
+                     drawRectSalmon(362,337,68,68);
+                     return 'J';
+                case 6:                                   /*Q*/
+                     drawRectSalmon(432,337,68,68);
+                     return 'Q';
+                case 7:                                   /*1*/
+                     drawRectSalmon(502,337,68,68);
+                     return '1';
+                case 8:                                   /*2*/
+                     drawRectSalmon(572,337,68,68);
+                     return '2';
+                default:
+                 break;
+             }
+            break;
+        case 5:
+            switch(col)
+            {
+                case 1:                                   /*3*/
+                     drawRectSalmon(82,407,68,68);
+                     return '3';
+                case 2:                                   /*4*/
+                     drawRectSalmon(152,407,68,68);
+                     return '4';
+                case 3:                                   /*5*/
+                     drawRectSalmon(222,407,68,68);
+                     return '5';
+                case 4:                                   /*6*/
+                     drawRectSalmon(292,407,68,68);
+                     return '6';
+                case 5:                                   /*7*/
+                     drawRectSalmon(362,407,68,68);
+                     return '7';
+                case 6:                                   /*8*/
+                     drawRectSalmon(432,407,68,68);
+                     return '8';
+                case 7:                                   /*9*/
+                     drawRectSalmon(502,407,68,68);
+                     return '9';
+                case 8:                                   /*0*/
+                     drawRectSalmon(572,407,68,68);
+                     return '0';
+                default:
+                 break;
+            }
+            break;
+        case 6:
+            switch(col)
+            {
+                case 1:                                   /*+*/
+                     drawRectSalmon(82,477,68,68);
+                     return '+';
+                case 2:                                   /*-*/
+                     drawRectSalmon(152,477,68,68);
+                     return '-';
+                case 3:                                   /*=*/
+                     drawRectSalmon(222,477,68,68);
+                     return '=';
+                case 4:                                   /*&*/
+                     drawRectSalmon(292,477,68,68);
+                     return '&';
+                case 5:                                   /*/*/
+                     drawRectSalmon(362,477,68,68);
+                     return '/';
+                case 6:                                   /*'*/
+                     drawRectSalmon(432,477,68,68);
+                     return '`';
+                case 7:                                   //Exclam
+                     drawRectSalmon(502,477,68,68);
+                     return '!';
+                case 8:									  //TTS
+                     drawRectSalmon(572,477,68,68);
+                     return '>';
+                default:
+                     break;
+             }
+            break;
+        default:
+            break;
+    }
+    return '\0';
 }
