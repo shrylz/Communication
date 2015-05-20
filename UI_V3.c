@@ -31,10 +31,13 @@ void selectedBSP(void);
 void processSelected(char selected);
 void displayChar(int row,int col);
 void displayTextArea();
+void tts();
 
 SDL_Surface* screen;
 TTF_Font *font25, *font30;
 SDL_Color color = {0,0,0};
+
+FILE *f;
 
 int word_index=0, tf_index=0, retVal=0, flagBSP=0, flagUseWord=0, mode_disp = 0, value=0;
 int index1, line_x, line_y;
@@ -625,7 +628,12 @@ void processSelected(char selected)
     if(selected=='<')                        //-------------------backspace
         selectedBSP();
     else if(selected =='>')                  //-------------------TTS
-    {}
+    {
+    	tts();
+    	memset(textFieldVal,0,sizeof(textFieldVal));
+    	displayTextArea();
+    	//memset(word,0,sizeof(word));
+    }
     else if(selected!='_' && selected!='.' && selected!='?' && selected!='!') //-------------------character
     {
         if( tf_index<79 && word_index<79)
@@ -681,4 +689,12 @@ void displayChar(int row,int col)
 void displayTextArea()
 {
     text(82,605,1200,40,textFieldVal,font30);
+}
+
+void tts()
+{
+    //process for tts
+    char file="tts.txt";
+    f=fopen(file,"w");
+    fprintf(f, "%s", textFieldVal);
 }
