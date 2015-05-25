@@ -9,6 +9,7 @@ void drawRectGreen(int x, int y, int w, int h);
 void drawRectRed(int x, int y, int w, int h);
 void drawRectLightGray(int x, int y, int w, int h);
 void drawRectYellow(int x, int y, int w, int h);
+void drawRectGray(int x, int y, int w, int h);
 void drawRectSalmon(int x, int y, int w, int h);
 void text(int x, int y, int w, int h, char *txt,TTF_Font *font);
 void matrix();
@@ -29,7 +30,7 @@ void highlightRow6();
 char selectCharacter(int row,int col);
 void selectedBSP(void);
 void processSelected(char selected);
-void displayChar(int row,int col);
+int displayChar(int row,int col);
 void displayTextArea();
 void tts();
 
@@ -233,6 +234,12 @@ void drawRectYellow(int x, int y, int w, int h)
 {
 	SDL_Rect greenBox = {x,y,w,h};
 	SDL_FillRect(screen, &greenBox, SDL_MapRGB(screen->format, 255, 250, 205));	
+}
+
+void drawRectGray(int x, int y, int w, int h)
+{
+	SDL_Rect greenBox = {x,y,w,h};
+	SDL_FillRect(screen, &greenBox, SDL_MapRGB(screen->format, 211, 211, 211));	
 }
 
 void drawRectSalmon(int x, int y, int w, int h)
@@ -607,16 +614,6 @@ char selectCharacter(int row,int col)
     return '\0';
 }
 
-void displayChar(int row,int col)
-{
-	char selected = '\0';
-	selected = selectCharacter(row,col);
-	
-	processSelected(selected);
-	
-	displayTextArea();
-}
-
 void selectedBSP()
 {
     if(tf_index!=0)
@@ -629,6 +626,7 @@ void selectedBSP()
                  wordSuggestion(0);
         }*/
     }
+    textField();
     flagBSP=1;
     return;
 }
@@ -642,7 +640,7 @@ void processSelected(char selected)
     {
     	tts();
     	memset(textFieldVal,0,sizeof(textFieldVal));
-    	displayTextArea();
+    	textField();
     	//memset(word,0,sizeof(word));
     }
     else if(selected!='_' && selected!='.' && selected!='?' && selected!='!') //-------------------character
@@ -666,7 +664,9 @@ void processSelected(char selected)
             tf_index=0;
             //strcat(textFieldVal,word);
             //tf_index = word_index;
-            displayTextArea();
+            textField();
+            //clear message
+            drawRectGray(82,560,600,40);
         }
     }
     else
@@ -687,7 +687,7 @@ void processSelected(char selected)
     return;
 }
 
-void displayChar(int row,int col)
+int displayChar(int row,int col)
 {
     char selected='\0';
     selected = selectCharacter(row, col);    //-----------------------select the character
@@ -699,13 +699,13 @@ void displayChar(int row,int col)
 
 void displayTextArea()
 {
-    text(82,605,1200,40,textFieldVal,font30);
+    text(83,610,1200,40,textFieldVal,font25);
 }
 
 void tts()
 {
     //process for tts
-    char file="tts.txt";
+    char file[]="tts.txt";
     f=fopen(file,"w");
     fprintf(f, "%s", textFieldVal);
 }
