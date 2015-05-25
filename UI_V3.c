@@ -27,19 +27,23 @@ void highlightRow4();
 void highlightRow5();
 void highlightRow6();
 char selectCharacter(int row,int col);
-void displayChar(int row,int col);
-void selectedBSP();
+void selectedBSP(void);
 void processSelected(char selected);
+void displayChar(int row,int col);
 void displayTextArea();
+void tts();
 
 SDL_Surface* screen;
 TTF_Font *font25, *font30;
 SDL_Color color = {0,0,0};
 
+
 int word_index=0, tf_index=0, retVal=0, flagBSP=0, flagUseWord=0, mode_disp = 0, value=0;
 int index1, line_x, line_y;
 
 char /**ws_disp, word[30], buff[30],*/ textFieldVal[100];
+
+FILE *f;
 
 char matrixVal[6][8] = {{'E','A','R','I','.','?',' ',' '},
                         {'O','T','N','S','B','F','Y','W'},
@@ -635,7 +639,12 @@ void processSelected(char selected)
     if(selected=='<')                        //-------------------backspace
         selectedBSP();
     else if(selected =='>')                  //-------------------TTS
-    {}
+    {
+    	tts();
+    	memset(textFieldVal,0,sizeof(textFieldVal));
+    	displayTextArea();
+    	//memset(word,0,sizeof(word));
+    }
     else if(selected!='_' && selected!='.' && selected!='?' && selected!='!') //-------------------character
     {
         if( tf_index<79 && word_index<79)
@@ -651,12 +660,12 @@ void processSelected(char selected)
                 memset(word,0,sizeof(word));
                 word_index=0;
             }*/
-            text(82,560,600,40, "Text Field Full.",font25);
+            text(82,560,600,40,"Text Field Full.",font25);
             SDL_Delay(1000);
             memset(textFieldVal,0,sizeof(textFieldVal));
             tf_index=0;
-            strcat(textFieldVal,word);
-            tf_index = word_index;
+            //strcat(textFieldVal,word);
+            //tf_index = word_index;
             displayTextArea();
         }
     }
@@ -667,14 +676,36 @@ void processSelected(char selected)
         else                                //----------------------- . || ? || !
             textFieldVal[tf_index++]= selected;
 
-        if(word[0]!=0)
+        /*if(word[0]!=0)
         {
              wordSuggestion(1);
              word_index=0;
              memset(word,0,sizeof(word));
         }
-        memset(buff,0,sizeof(buff));
+        memset(buff,0,sizeof(buff));*/
     }
     return;
 }
 
+void displayChar(int row,int col)
+{
+    char selected='\0';
+    selected = selectCharacter(row, col);    //-----------------------select the character
+
+    processSelected(selected);
+
+    displayTextArea();
+}
+
+void displayTextArea()
+{
+    text(82,605,1200,40,textFieldVal,font30);
+}
+
+void tts()
+{
+    //process for tts
+    char file="tts.txt";
+    f=fopen(file,"w");
+    fprintf(f, "%s", textFieldVal);
+}
