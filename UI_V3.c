@@ -1,6 +1,9 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 void screen_init();
 void ttf_init();
@@ -640,6 +643,7 @@ void processSelected(char selected)
     {
     	tts();
     	memset(textFieldVal,0,sizeof(textFieldVal));
+    	tf_index=0;
     	textField();
     	//memset(word,0,sizeof(word));
     }
@@ -708,4 +712,6 @@ void tts()
     char file[]="tts.txt";
     f=fopen(file,"w");
     fprintf(f, "%s", textFieldVal);
+    
+    system("espeak -s 90 --stdout -f tts.txt -w tts.wav && aplay tts.wav");
 }
