@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
+//#include "espeak/speak_lib.h"
 
 void screen_init();
 void ttf_init();
@@ -45,7 +46,7 @@ SDL_Color color = {0,0,0};
 int word_index=0, tf_index=0, retVal=0, flagBSP=0, flagUseWord=0, mode_disp = 0, value=0;
 int index1, line_x, line_y;
 
-char /**ws_disp, word[30], buff[30],*/ textFieldVal[100];
+char /**ws_disp, word[30], buff[30],*/ textFieldVal[100], lower[100];
 
 FILE *f;
 
@@ -676,8 +677,8 @@ void processSelected(char selected)
     else
     {
         if(selected == '_')                 //-------------------Space
-            textFieldVal[tf_index++]=' ';
-        else                                //----------------------- . || ? || !
+		    textFieldVal[tf_index++]=' ';
+        else     							//----------------------- . || ? || !                        
             textFieldVal[tf_index++]= selected;
 
         /*if(word[0]!=0)
@@ -709,9 +710,20 @@ void displayTextArea()
 void tts()
 {
     //process for tts
-    char file[]="tts.txt";
-    f=fopen(file,"w");
-    fprintf(f, "%s", textFieldVal);
+    int i;
+    char command[128]={'\0'};
     
-    system("espeak -s 90 --stdout -f tts.txt -w tts.wav && aplay tts.wav");
+    for(i=0;i<strlen(textFieldVal);i++)
+    {
+		lower[i] = tolower(textFieldVal[i]);
+	}
+    
+    strcat(command,"pico2wave -w tts.wav '");
+    strcat(command,lower);
+    strcat(command,"' && aplay --rate=32000 tts.wav");
+    
+    system(command);
+    //system("espeak -ven+f3 -s 90 -f tts.txt -w tts.wav && aplay tts.wav");
 }
+
+
